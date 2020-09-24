@@ -1,4 +1,5 @@
 import sys
+import os
 import tensorflow as tf
 import tensorflow.keras as keras
 from tensorflow.keras.models import Model
@@ -14,11 +15,12 @@ from dataFormat1 import csv_to_dataset
 # dataset
 csv_file = ""
 
-if (len(sys.argv) != 2):
-    print("ERROR: script must have csv file name as first and only argument")
+if (len(sys.argv) != 3):
+    print("ERROR: script must have csv file name as first argument and ticker symbol as second argument")
     quit()
 else:
     csv_file = sys.argv[1]
+    symbol = sys.argv[2]
 
 x_train, y_train, x_test, y_test, unscaled_y_test, ohlcv_histories, y_normaliser = getDataset(csv_file)
 
@@ -73,7 +75,8 @@ plt.legend(['Real', 'Predicted'])
 
 plt.savefig("plot.png")
 
+
 from datetime import datetime
-model.save(f'basic_model_AMZN.h5')
+model.save(os.getcwd() + f'/models/basic_model_{symbol}.h5')
 
 

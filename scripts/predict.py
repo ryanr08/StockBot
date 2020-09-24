@@ -7,15 +7,15 @@ from dataFormat1 import history_points
 from dataFormat1 import getDataset
 from dataFormat1 import csv_to_dataset
 
-# csv_file = ""
+symbol = ""
 
-# if (len(sys.argv) != 2):
-#     print("ERROR: script must have csv file name as first and only argument")
-#     quit()
-# else:
-#     csv_file = sys.argv[1]
+if (len(sys.argv) != 2):
+    print("ERROR: script must have symbol as first and only argument")
+    quit()
+else:
+    symbol = sys.argv[1]
 
-data = pd.read_csv("../Data/training_data/AAPL_test.csv")
+data = pd.read_csv(f"../Data/training_data/{symbol}_test.csv")
 data = data.drop('date', axis=1)
 data = data.drop(0, axis=0)
 
@@ -30,12 +30,13 @@ y_normaliser = preprocessing.MinMaxScaler()
 y_normaliser.fit(next_day_open_values)
 
 
-model = load_model('basic_model_AAPL.h5')
+model = load_model(f'basic_model_{symbol}.h5')
 
 
 y_test_predicted = model.predict(x_test)
 y_test_predicted = y_normaliser.inverse_transform(y_test_predicted)
-print(y_test_predicted)
+with open("predictions.txt", 'w') as file:
+    file.write(f"{symbol}: {y_test_predicted} + \n")
 
 # buys = []
 # sells = []

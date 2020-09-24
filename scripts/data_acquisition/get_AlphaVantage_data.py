@@ -4,6 +4,7 @@ import json
 import argparse
 
 
+
 def save_dataset(symbol, time_window):
     api_key = ""
     with open("./api_key.txt") as file:
@@ -27,6 +28,7 @@ def save_dataset(symbol, time_window):
 
 
 if __name__ == "__main__":
+    print("LOG")
     parser = argparse.ArgumentParser()
 
     parser.add_argument('symbol', type=str, help="the stock symbol you want to download")
