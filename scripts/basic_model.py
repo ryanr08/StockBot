@@ -72,6 +72,6 @@ plt.legend(['Real', 'Predicted'])
 plt.savefig("plot.png")
 
 from datetime import datetime
-model.save(f'basic_model.h5')
+model.save(f'basic_model_MSFT.h5')
 
 
