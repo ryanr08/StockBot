@@ -15,7 +15,7 @@ from dataFormat1 import csv_to_dataset
 # else:
 #     csv_file = sys.argv[1]
 
-data = pd.read_csv("../Data/training_data/MSFT_test.csv")
+data = pd.read_csv("../Data/training_data/AAPL_test.csv")
 data = data.drop('date', axis=1)
 data = data.drop(0, axis=0)
 
@@ -30,7 +30,7 @@ y_normaliser = preprocessing.MinMaxScaler()
 y_normaliser.fit(next_day_open_values)
 
 
-model = load_model('basic_model_MSFT.h5')
+model = load_model('basic_model_AAPL.h5')
 
 
 y_test_predicted = model.predict(x_test)

@@ -28,6 +28,8 @@ print(x_test.shape)
 
 # model architecture
 
+EPOCHS = 50
+
 lstm_input = Input(shape=(history_points, 5), name='lstm_input')
 x = LSTM(50, name='lstm_0')(lstm_input)
 x = Dropout(0.2, name='lstm_dropout_0')(x)
@@ -39,7 +41,7 @@ output = Activation('linear', name='linear_output')(x)
 model = Model(inputs=lstm_input, outputs=output)
 adam = optimizers.Adam(lr=0.0005)
 model.compile(optimizer=adam, loss='mse')
-model.fit(x=x_train, y=y_train, batch_size=32, epochs=50, shuffle=True, validation_split=0.1)
+model.fit(x=x_train, y=y_train, batch_size=32, epochs=EPOCHS, shuffle=True, validation_split=0.1)
 
 
 # evaluation
@@ -72,6 +74,6 @@ plt.legend(['Real', 'Predicted'])
 plt.savefig("plot.png")
 
 from datetime import datetime
-model.save(f'basic_model_MSFT.h5')
+model.save(f'basic_model_AMZN.h5')
 
 
