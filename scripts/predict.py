@@ -1,6 +1,8 @@
 import numpy as np
 import sys
+import os
 import pandas as pd
+import pprint
 from sklearn import preprocessing
 from tensorflow.keras.models import load_model
 from dataFormat1 import history_points
@@ -16,8 +18,14 @@ else:
     symbol = sys.argv[1]
 
 data = pd.read_csv(f"../Data/training_data/{symbol}_test.csv")
+
+pp = pprint.PrettyPrinter(indent = 4)
+pp.pprint(data)
+
 data = data.drop('date', axis=1)
-data = data.drop(0, axis=0)
+data = data.drop('Unnamed: 6', axis=1)
+
+pp.pprint(data)
 
 data_normaliser = preprocessing.MinMaxScaler()
 data_normalised = data_normaliser.fit_transform(data)
@@ -29,14 +37,16 @@ next_day_open_values = np.expand_dims(next_day_open_values, -1)
 y_normaliser = preprocessing.MinMaxScaler()
 y_normaliser.fit(next_day_open_values)
 
-
+os.chdir('./models')
 model = load_model(f'basic_model_{symbol}.h5')
 
 
 y_test_predicted = model.predict(x_test)
 y_test_predicted = y_normaliser.inverse_transform(y_test_predicted)
-with open("predictions.txt", 'w') as file:
-    file.write(f"{symbol}: {y_test_predicted} + \n")
+
+os.chdir('..')
+with open("predictions.txt", 'a') as file:
+    file.write(f"{symbol}: {y_test_predicted} \n")
 
 # buys = []
 # sells = []
