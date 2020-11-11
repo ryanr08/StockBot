@@ -17,13 +17,13 @@ if (len(sys.argv) != 2):
 else:
     symbol = sys.argv[1]
 
-data = pd.read_csv(f"../Data/training_data/{symbol}_test.csv")
+data = pd.read_csv(f"../Data/training_data/{symbol}_daily.csv")
 
 pp = pprint.PrettyPrinter(indent = 4)
 pp.pprint(data)
 
 data = data.drop('date', axis=1)
-data = data.drop('Unnamed: 6', axis=1)
+#data = data.drop('Unnamed: 6', axis=1)
 
 pp.pprint(data)
 
