@@ -1,3 +1,5 @@
+#Double Moving Average Crossover
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,3 +27,12 @@ plt.xlabel('1999 - 2020')
 plt.legend(loc='upper left')
 plt.title("Apple close prices and SMAs over time")
 plt.savefig("plt.png")
+
+#NEED to implement:
+# every x minutes/hours every day:
+    # grab intraday trading values
+    # grab intraday SMAs
+    # if SMA50 > SMA200:
+        # buy stock at current price
+    # if SMA50 < SMA200:
+        # sell all shares of stock
