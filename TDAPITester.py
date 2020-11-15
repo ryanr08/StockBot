@@ -75,10 +75,16 @@ for desiredStockTicker in desiredStockTickers:
 
     for i in range (10,len(df.iloc[:,8])):
         if (own_shares):
-            if (df.iloc[:,7][i] <= df.iloc[:,8][i]):
+            if (df.iloc[:,3][i] > share_high):
+                share_high = df.iloc[:,3][i]
+            elif (df.iloc[:,3][i] <= share_high * .98):
                 balance = sell_share(df.iloc[:,3][i], num_shares, balance)
                 own_shares = False
                 print(f"Sell at {df.iloc[:,3][i]}")
+            # if (df.iloc[:,7][i] <= df.iloc[:,8][i]):
+            #     balance = sell_share(df.iloc[:,3][i], num_shares, balance)
+            #     own_shares = False
+            #     print(f"Sell at {df.iloc[:,3][i]}")
         else:
             if df.iloc[:,7][i] >= df.iloc[:,8][i]:
                 num_shares, balance = buy_share(df.iloc[:,3][i], balance)

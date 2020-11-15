@@ -46,17 +46,28 @@ def main():
     num_shares = 0
     balance = 100000
     own_shares = False
-
-    for i in range (200, 5090):
+    share_high = -1
+    for i in range (5200, len(AAPL_daily.iloc[:,5])):
         if (own_shares):
-            if (AAPL_SMA30.iloc[:,1][i] <= AAPL_SMA200.iloc[:,1][i]):
+            if (AAPL_daily.iloc[:,5][i] > share_high):
+                share_high = AAPL_daily.iloc[:,5][i]
+            elif (AAPL_daily.iloc[:,5][i] <= share_high * .80):
                 balance = sell_share(AAPL_daily.iloc[:,5][i], num_shares, balance)
                 own_shares = False
+                share_high = 0
+                print(f"Sell at: {AAPL_daily.iloc[:,5][i]}")
+            elif (AAPL_SMA30.iloc[:,1][i - 30] <= AAPL_SMA200.iloc[:,1][i - 200]):
+                balance = sell_share(AAPL_daily.iloc[:,5][i], num_shares, balance)
+                own_shares = False
+                share_high = 0
+                print(f"Sell at: {AAPL_daily.iloc[:,5][i]}")
         else:
-            if (AAPL_SMA30.iloc[:,1][i] >= AAPL_SMA200.iloc[:,1][i]):
+            if (AAPL_SMA30.iloc[:,1][i - 30] >= AAPL_SMA200.iloc[:,1][i - 200]):
                 num_shares, balance = buy_share(AAPL_daily.iloc[:,5][i], balance)
                 own_shares = True
-    balance = sell_share(AAPL_daily.iloc[:,5][5090], num_shares, balance)
+                print(f"Buy at: {AAPL_daily.iloc[:,5][i]}")
+                share_high = AAPL_daily.iloc[:,5][i]
+    balance = sell_share(AAPL_daily.iloc[:,5][len(AAPL_daily.iloc[:,5]) - 1], num_shares, balance)
     print (balance)
     percent_profit = balance / 100000
     print (f"percent profit: {percent_profit}")
