@@ -3,36 +3,63 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
 # import csv
 # with open ("./AAPL_daily_adj.csv", "w") as file:
 #     with open('./Data/training_data/AAPL_daily_adj.csv', 'r') as textfile:
 #         for row in reversed(list(csv.reader(textfile))):
 #             file.write(', '.join(row))
 #             file.write('\n')
+def sell_share(share_price, num_shares, balance):
+    balance += (num_shares * share_price)
+    return balance
 
-AAPL_daily = pd.read_csv("./AAPL_daily_adj.csv")
-AAPL_SMA50 = pd.read_csv("./Data/training_data/AAPL_sma50.csv")
-AAPL_SMA200 = pd.read_csv("./Data/training_data/AAPL_sma200.csv")
-AAPL_SMA30 = pd.read_csv("./Data/training_data/AAPL_sma30.csv")
-AAPL_SMA100 = pd.read_csv("./Data/training_data/AAPL_sma100.csv")
+def buy_share(share_price, balance):
+    num_shares = 0
+    while (True):
+        if (balance - share_price >= 0):
+            num_shares += 1
+            balance -= share_price
+        else:
+            break
+    return num_shares, balance
 
-plt.figure(figsize=(20, 10))
-plt.plot(AAPL_daily[' 5. adjusted close'], label='AAPL', color='green')
-plt.plot(AAPL_SMA50['SMA'], label='SMA50', color='blue')
-plt.plot(AAPL_SMA200['SMA'], label='SMA200', color='red')
-plt.plot(AAPL_SMA30['SMA'], label='SMA30', color='yellow')
-plt.plot(AAPL_SMA100['SMA'], label='SMA100', color='purple')
-plt.ylabel('Apple adj prices & SMAs')
-plt.xlabel('1999 - 2020')
-plt.legend(loc='upper left')
-plt.title("Apple close prices and SMAs over time")
-plt.savefig("plt.png")
+def main():
+    AAPL_daily = pd.read_csv("./AAPL_daily_adj.csv")
+    AAPL_SMA50 = pd.read_csv("./Data/training_data/AAPL_sma50.csv")
+    AAPL_SMA200 = pd.read_csv("./Data/training_data/AAPL_sma200.csv")
+    AAPL_SMA30 = pd.read_csv("./Data/training_data/AAPL_sma30.csv")
+    AAPL_SMA100 = pd.read_csv("./Data/training_data/AAPL_sma100.csv")
 
-#NEED to implement:
-# every x minutes/hours every day:
-    # grab intraday trading values
-    # grab intraday SMAs
-    # if SMA50 > SMA200:
-        # buy stock at current price
-    # if SMA50 < SMA200:
-        # sell all shares of stock
+    plt.figure(figsize=(20, 10))
+    plt.plot(AAPL_daily[' 5. adjusted close'], label='AAPL', color='green')
+    plt.plot(AAPL_SMA50['SMA'], label='SMA50', color='blue')
+    plt.plot(AAPL_SMA200['SMA'], label='SMA200', color='red')
+    plt.plot(AAPL_SMA30['SMA'], label='SMA30', color='yellow')
+    plt.plot(AAPL_SMA100['SMA'], label='SMA100', color='purple')
+    plt.ylabel('Apple adj prices & SMAs')
+    plt.xlabel('1999 - 2020')
+    plt.legend(loc='upper left')
+    plt.title("Apple close prices and SMAs over time")
+    #plt.savefig("plt.png")
+
+    num_shares = 0
+    balance = 100000
+    own_shares = False
+
+    for i in range (200, 5090):
+        if (own_shares):
+            if (AAPL_SMA30.iloc[:,1][i] <= AAPL_SMA200.iloc[:,1][i]):
+                balance = sell_share(AAPL_daily.iloc[:,5][i], num_shares, balance)
+                own_shares = False
+        else:
+            if (AAPL_SMA30.iloc[:,1][i] >= AAPL_SMA200.iloc[:,1][i]):
+                num_shares, balance = buy_share(AAPL_daily.iloc[:,5][i], balance)
+                own_shares = True
+    balance = sell_share(AAPL_daily.iloc[:,5][5090], num_shares, balance)
+    print (balance)
+    percent_profit = balance / 100000
+    print (f"percent profit: {percent_profit}")
+
+if __name__ == '__main__':
+    main()
