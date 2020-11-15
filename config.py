@@ -3,8 +3,8 @@ import json
 import urllib.parse
 
 dir = os.getcwd()
-f = open(dir + r'\stockbot\response.json',)
-f2 = open(dir + r'\stockbot\tdSecrets.json',)
+f = open(dir + r'\response.json',)
+f2 = open(r'..\tdSecrets.json',)
 response_dict = json.loads(f.read())
 secrets_dict = json.loads(f2.read())
 
