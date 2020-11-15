@@ -8,6 +8,8 @@ history_points = 50
 def csv_to_dataset(csv_path):
     data = pd.read_csv(csv_path)
     data = data.drop('date', axis=1)
+    data = data.drop('Name',axis=1)
+    data = data.drop('Unnamed: 7', axis=1)
     data = data.drop(0, axis=0)
 
     data_normaliser = preprocessing.MinMaxScaler()

@@ -3,11 +3,26 @@ import sys
 import os
 import pandas as pd
 import pprint
+import tensorflow as tf
 from sklearn import preprocessing
 from tensorflow.keras.models import load_model
 from dataFormat1 import history_points
 from dataFormat1 import getDataset
 from dataFormat1 import csv_to_dataset
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+  # Restrict TensorFlow to only allocate 1GB of memory on the first GPU
+  try:
+    tf.config.experimental.set_virtual_device_configuration(
+        gpus[0],
+        [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1000)])
+    logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+    print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+  except RuntimeError as e:
+    # Virtual devices must be set before GPUs have been initialized
+    print(e)
+
 
 symbol = ""
 
@@ -17,13 +32,22 @@ if (len(sys.argv) != 2):
 else:
     symbol = sys.argv[1]
 
+<<<<<<< HEAD
 data = pd.read_csv(f"../Data/training_data/{symbol}_daily.csv")
+=======
+data = pd.read_csv(f"../scripts/split_5_year_data/{symbol}_test.csv")
+>>>>>>> 205c948... Added TD API interfacing
 
 pp = pprint.PrettyPrinter(indent = 4)
 pp.pprint(data)
 
 data = data.drop('date', axis=1)
+<<<<<<< HEAD
 #data = data.drop('Unnamed: 6', axis=1)
+=======
+data = data.drop('Name',axis=1)
+data = data.drop('Unnamed: 7', axis=1)
+>>>>>>> 205c948... Added TD API interfacing
 
 pp.pprint(data)
 
